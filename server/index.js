@@ -5,10 +5,14 @@ const logger = require("morgan");
 const { connect } = require("./config/database");
 const HTTPSTATUSCODE = require("./utils/httpStatusCode");
 const teams = require("./app/api/routes/teams.routes");
+const user = require("./app/api/routes/user.routes");
+const league = require("./app/api/routes/league.routes");
 
 connect();
 
 const app = express();
+
+app.set("secretKey", "nodeRestApi");
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
@@ -28,6 +32,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(logger("dev"));
 
 app.use("/teams", teams);
+app.use("/user", user);
+app.use("/league", league)
 
 app.use((req, res, next) => {
     let err = new Error();
@@ -45,3 +51,4 @@ app.disable('x-powered-by');
 app.listen(3000, () => {
     console.log("Node server listening on port 3000");
 });
+
